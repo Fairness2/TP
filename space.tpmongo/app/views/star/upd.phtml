@@ -1,0 +1,15 @@
+<?
+	if (isset($star))
+	{
+		$id = $star->_id;
+		$name = $star->name;
+		$weight = $star->weight;
+		$age = $star->age;
+		$solar_system = SolarSystem::findById($star->solar_system_id)->name;
+		$type = TypeOfStar::findById($star->type_id)->name;
+		include "upd_article.phtml";
+	}
+	else
+		echo '<article class="midl"><h2>Что-то пошло не так</h2></article>';
+?>
+

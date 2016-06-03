@@ -1,0 +1,12 @@
+<?
+	if (isset($solar_system))
+	{
+		$id = $solar_system->_id;
+		$name = $solar_system->name;
+		$galaxy = Galaxy::findById($solar_system->galaxy_id);
+		include "upd_article.phtml";
+	}
+	else
+		echo '<article class="midl"><h2>Что-то пошло не так</h2></article>';
+?>
+

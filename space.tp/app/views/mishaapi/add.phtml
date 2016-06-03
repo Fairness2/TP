@@ -1,0 +1,36 @@
+<article class="midl">
+	<h2>Грузоперевозки</h2>
+	<p>Этот раздел посвящён работе с API. Добавление записи</p>
+	<form name="fupd" action="" method="post">
+		<select name="table" class="galaxyin">
+			<option disabled="disabled">Выберете таблицу</option>
+			<option>машины</option>
+			<option>марки автомобилей</option>
+			<option>водители</option>
+			<option>организации</option>
+			<option>владельцы</option>
+			<option>продукты</option>
+			<option>типы продуктов</option>
+			<option>груз</option>
+			<option>магазины</option>
+			<option>перевозки</option>	
+		</select>
+		<input class="galaxybutton" onclick="search()" name="upd" type="button" value="Показать форму">
+	</form>
+</article>
+
+<article class="select midl"></article>
+
+<script>
+function search() {
+	 			var table = document.getElementsByTagName('select')[0].value;
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://space.tp/mishaapi/form',
+                    data: 'table=' + table,
+                    success: function(data) {
+                        $('.select').html(data);
+                    }
+                });
+            }
+</script>

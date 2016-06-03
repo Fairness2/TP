@@ -1,0 +1,21 @@
+<?
+	if (isset($stars))
+	{
+		foreach ($stars->items as $star) {
+			$id = $star->_id;
+			$name = $star->name;
+			$weight = $star->weight;
+			$age = $star->age;
+			$solar_system = SolarSystem::findById($star->solar_system_id);
+			$type = TypeOfStar::findById($star->type_id)->name;
+
+			include "article.phtml";
+		}
+		echo "<footer>";
+		for ($i=1; $i <= $stars->total_pages; $i++) 
+			include "foot.phtml";
+		echo "</footer>";
+	}
+	else
+		echo '<article class="midl"><h2>Звёзд нет</h2></article>';
+?>
