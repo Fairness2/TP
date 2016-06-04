@@ -1,0 +1,19 @@
+<?if ($result) {?>
+<article class="midl">
+	<h2><?=$result?></h2>
+</article>
+
+<?}
+else
+	{?>
+<article class="midl">
+	<h2>ОП</h2>
+	<?
+	if ($messages) {
+		foreach ($messages as $message) {
+            echo "<p>".$message."</p>";
+        }
+	}		
+	?>
+</article>
+<?}?>

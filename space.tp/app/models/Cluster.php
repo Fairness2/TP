@@ -36,14 +36,6 @@ class Cluster extends Model
 
     public function setName($name)
     {
-        $name = htmlspecialchars(strip_tags(stripslashes(trim($name))));
-        // Имя слишком короткое?
-        if (strlen($name) < 1) {
-            throw new \InvalidArgumentException('Имя слишком короткое');
-        }
-        elseif (strlen($name) > 100) {
-        	throw new \InvalidArgumentException('Имя слишком длинное');
-        }
         $this->name = $name;
     }
 
@@ -64,10 +56,6 @@ class Cluster extends Model
 
     public function setSize($size)
     {
-        $size = htmlspecialchars(strip_tags(stripslashes(trim($size))));
-        if ($size < 0) {
-            throw new \InvalidArgumentException('Размер не может быть отрицательным');
-        }
         $this->size = $size;
     }
 

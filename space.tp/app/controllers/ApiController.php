@@ -1294,7 +1294,13 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'weight' => $this->request->getJsonRawBody()->weight,
+            'type' => $this->request->getJsonRawBody()->type,
+            'age' => $this->request->getJsonRawBody()->age,
+            'galaxy' => $this->request->getJsonRawBody()->galaxy);
+        if ($array) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -1347,10 +1353,10 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
-                $black_holes = BlackHole::findFirstByName($this->request->getPost("name"));
+                $black_holes = BlackHole::findFirstByName($array['name']);
 
                 if ($black_holes == false) 
                 {
@@ -1358,7 +1364,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("galaxy"))
+                                "name" => $array['galaxy'])
                         )
                     );
 
@@ -1366,7 +1372,7 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $galaxy_id == true)
@@ -1374,9 +1380,9 @@ class ApiController extends Controller
                         try 
                         {
                             $black_hole = new BlackHole();
-                            $black_hole->name = $this->request->getPost("name");
-                            $black_hole->weight = $this->request->getPost("weight");
-                            $black_hole->age = $this->request->getPost("age");
+                            $black_hole->name = $array['name'];
+                            $black_hole->weight = $array['weight'];
+                            $black_hole->age = $array['age'];
                             $black_hole->type = $type_id->id; // передавай имена, а не id
                             $black_hole->galaxy = $galaxy_id->id;
                             $success = $black_hole->save();
@@ -1456,7 +1462,10 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'size' => $this->request->getJsonRawBody()->size);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -1487,24 +1496,25 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
-                $clusters = Cluster::findFirstByName($this->request->getPost("name"));
+                $clusters = Cluster::findFirstByName($array['name']);
 
                 if ($clusters == false) 
                 {
                     try 
                     {
                         $cluster = new Cluster();
-                        $cluster->name = $this->request->getPost("name");
-                        $cluster->size = $this->request->getPost("size");
+                        $cluster->name = $array['name'];
+                        $cluster->size = $array['size'];
                         $success = $cluster->save();
                         if ($success) {
                             $response = new Response();
                             $response->setJsonContent(
                                 array(
-                                    'status' => 'ADD'
+                                    'status' => 'ADD',
+                                    'fgnfgn' => $this->request->getJsonRawBody(),
                                 )
                             );                        
                         }
@@ -1513,7 +1523,8 @@ class ApiController extends Controller
                             $response = new Response();
                             $response->setJsonContent(
                                 array(
-                                    'status' => 'NOT-ADD'
+                                    'status' => 'NOT-ADD',
+                                    'dsdg' => $this->request->getJsonRawBody()->name
                                 )
                             );
                         }
@@ -1543,7 +1554,7 @@ class ApiController extends Controller
                 $response = new Response();
                 $response->setJsonContent(
                 array(
-                    'status' => 'UNCORRECT'
+                    'status' => 'UNCORRECT',
                 )
             );
             }
@@ -1566,7 +1577,12 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'size' => $this->request->getJsonRawBody()->size,
+            'cluster' => $this->request->getJsonRawBody()->cluster,
+            'type' => $this->request->getJsonRawBody()->type);
+        if ($array) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -1603,10 +1619,10 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
-                $galaxis = Galaxy::findFirstByName($this->request->getPost("name"));
+                $galaxis = Galaxy::findFirstByName($array['name']);
 
                 if ($galaxis == false) 
                 {
@@ -1614,7 +1630,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("cluster"))
+                                "name" => $array['cluster'])
                         )
                     );
 
@@ -1622,7 +1638,7 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $cluster_id == true)
@@ -1630,8 +1646,8 @@ class ApiController extends Controller
                         try 
                         {
                             $galaxy = new Galaxy();
-                            $galaxy->name = $this->request->getPost("name");
-                            $galaxy->size = $this->request->getPost("size");
+                            $galaxy->name = $array['name'];
+                            $galaxy->size = $array['size'];
                             $galaxy->type = $type_id->id; // передавай имена, а не id
                             $galaxy->cluster = $cluster_id->id;
                             $success = $galaxy->save();
@@ -1711,7 +1727,12 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'weight' => $this->request->getJsonRawBody()->weight,
+            'solar_system' => $this->request->getJsonRawBody()->solar_system,
+            'type' => $this->request->getJsonRawBody()->type);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -1750,10 +1771,10 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
-                $planets = Planet::findFirstByName($this->request->getPost("name"));
+                $planets = Planet::findFirstByName($array['name']);
 
                 if ($planets == false) 
                 {
@@ -1761,7 +1782,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("solar_system"))
+                                "name" => $array['solar_system'])
                         )
                     );
 
@@ -1769,7 +1790,7 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $solar_system_id == true)
@@ -1777,8 +1798,8 @@ class ApiController extends Controller
                         try 
                         {
                             $planet = new Planet();
-                            $planet->name = $this->request->getPost("name");
-                            $planet->weight = $this->request->getPost("weight");
+                            $planet->name = $array['name'];
+                            $planet->weight = $array['weight'];
                             $planet->type = $type_id->id; // передавай имена, а не id
                             $planet->solar_system = $solar_system_id->id;
                             $success = $planet->save();
@@ -1858,7 +1879,10 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'galaxy' => $this->request->getJsonRawBody()->galaxy);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -1880,10 +1904,10 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
-                $solar_systems = SolarSystem::findFirstByName($this->request->getPost("name"));
+                $solar_systems = SolarSystem::findFirstByName($array['name']);
 
                 if ($solar_systems == false) 
                 {
@@ -1891,7 +1915,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("galaxy"))
+                                "name" => $array['galaxy'])
                         )
                     );
 
@@ -1900,7 +1924,7 @@ class ApiController extends Controller
                         try 
                         {
                             $solar_system = new SolarSystem();
-                            $solar_system->name = $this->request->getPost("name");
+                            $solar_system->name = $array['name'];
                             $solar_system->galaxy = $galaxy_id->id;
                             $success = $solar_system->save();
                             if ($success) {
@@ -1979,7 +2003,13 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'weight' => $this->request->getJsonRawBody()->weight,
+            'age' => $this->request->getJsonRawBody()->age,
+            'solar_system' => $this->request->getJsonRawBody()->solar_system,
+            'type' => $this->request->getJsonRawBody()->type);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -2032,10 +2062,10 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
-                $stars = Star::findFirstByName($this->request->getPost("name"));
+                $stars = Star::findFirstByName($array['name']);
 
                 if ($stars == false) 
                 {
@@ -2043,7 +2073,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("solar_system"))
+                                "name" => $array['solar_system'])
                         )
                     );
 
@@ -2051,7 +2081,7 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $solar_system_id == true)
@@ -2059,9 +2089,9 @@ class ApiController extends Controller
                         try 
                         {
                             $star = new Star();
-                            $star->name = $this->request->getPost("name");
-                            $star->weight = $this->request->getPost("weight");
-                            $star->age = $this->request->getPost("age");
+                            $star->name = $array['name'];
+                            $star->weight = $array['weight'];
+                            $star->age = $array['age'];
                             $star->type = $type_id->id; // передавай имена, а не id
                             $star->solar_system = $solar_system_id->id;
                             $success = $star->save();
@@ -2561,7 +2591,14 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'weight' => $this->request->getJsonRawBody()->weight,
+            'type' => $this->request->getJsonRawBody()->type,
+            'age' => $this->request->getJsonRawBody()->age,
+            'galaxy' => $this->request->getJsonRawBody()->galaxy,
+            'id' => $this->request->getJsonRawBody()->id);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -2618,15 +2655,15 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
                 $black_holes = BlackHole::find(
                     array(
                         "name = :name: AND id != :id:",
                         "bind" => array(
-                            "name" => $this->request->getPost("name"),
-                            "id" => $this->request->getPost("id")
+                            "name" => $array['name'],
+                            "id" => $array['id']
                         )
                     )
                 );
@@ -2637,7 +2674,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("galaxy"))
+                                "name" => $array['galaxy'])
                         )
                     );
 
@@ -2645,17 +2682,17 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $galaxy_id == true)
                     {
                         try 
                         {
-                            $black_hole = BlackHole::findFirstById($this->request->getPost("id"));
-                            $black_hole->name = $this->request->getPost("name");
-                            $black_hole->weight = $this->request->getPost("weight");
-                            $black_hole->age = $this->request->getPost("age");
+                            $black_hole = BlackHole::findFirstById($array['id']);
+                            $black_hole->name = $array['name'];
+                            $black_hole->weight = $array['weight'];
+                            $black_hole->age = $array['age'];
                             $black_hole->type = $type_id->id; // передавай имена, а не id
                             $black_hole->galaxy = $galaxy_id->id;
                             $success = $black_hole->save();
@@ -2735,10 +2772,14 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'size' => $this->request->getJsonRawBody()->size,
+            'id' => $this->request->getJsonRawBody()->id);
+        if ($array == true) 
         {
             $validation = new Validation();
-            $validation->add('name', new PresenceOf(array(
+            /*$validation->add('name', new PresenceOf(array(
                'message' => 'Вы ввели пустое название<br>'
             )));
             $validation->add('name', new StringLength(array(
@@ -2767,29 +2808,29 @@ class ApiController extends Controller
             $validation->add('id', new RegexValidator(array(
                'pattern' => '/[0-9]{1,9}/',
                'message' => 'Введите вес правильно<br />'
-            )));
+            )));*/
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
                 $clusters = Cluster::find(
                     array(
                         "name = :name: AND id != :id:",
                         "bind" => array(
-                            "name" => $this->request->getPost("name"),
-                            "id" => $this->request->getPost("id")
+                            "name" => $array['name'],
+                            "id" => $array['id']
                         )
                     )
                 );
 
-                if ($clusters == false) 
+                if (count($clusters) == 0) 
                 {
                     try 
                     {
-                        $cluster = Cluster::findFirstById($this->request->getPost("id"));
-                        $cluster->name = $this->request->getPost("name");
-                        $cluster->size = $this->request->getPost("size");
+                        $cluster = Cluster::findFirstById($array['id']);
+                        $cluster->name = $array['name'];
+                        $cluster->size = $array['size'];
                         $success = $cluster->save();
                         if ($success) {
                             $response = new Response();
@@ -2823,7 +2864,8 @@ class ApiController extends Controller
                     $response = new Response();
                     $response->setJsonContent(
                         array(
-                            'status' => 'NAME-CLOSED'
+                            'status' => 'NAME-CLOSED',
+                            'name' => $this->request->getJsonRawBody()
                         )
                     );
                 }
@@ -2857,7 +2899,13 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'size' => $this->request->getJsonRawBody()->size,
+            'cluster' => $this->request->getJsonRawBody()->cluster,
+            'type' => $this->request->getJsonRawBody()->type,
+            'id' => $this->request->getJsonRawBody()->id);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -2898,15 +2946,15 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
                 $galaxis = Galaxy::find(
                     array(
                         "name = :name: AND id != :id:",
                         "bind" => array(
-                            "name" => $this->request->getPost("name"),
-                            "id" => $this->request->getPost("id")
+                            "name" => $array['name'],
+                            "id" => $array['id']
                         )
                     )
                 );
@@ -2917,7 +2965,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("cluster"))
+                                "name" => $array['cluster'])
                         )
                     );
 
@@ -2925,16 +2973,16 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $cluster_id == true)
                     {
                         try 
                         {
-                            $galaxy = Galaxy::findFirstById($this->request->getPost("id"));
-                            $galaxy->name = $this->request->getPost("name");
-                            $galaxy->size = $this->request->getPost("size");
+                            $galaxy = Galaxy::findFirstById($array['id']);
+                            $galaxy->name = $array['name'];
+                            $galaxy->size = $array['size'];
                             $galaxy->type = $type_id->id; // передавай имена, а не id
                             $galaxy->cluster = $cluster_id->id;
                             $success = $galaxy->save();
@@ -3014,7 +3062,13 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'weight' => $this->request->getJsonRawBody()->weight,
+            'solar_system' => $this->request->getJsonRawBody()->solar_system,
+            'type' => $this->request->getJsonRawBody()->type,
+            'id' => $this->request->getJsonRawBody()->id);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -3057,15 +3111,15 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
                 $planets = Planet::find(
                     array(
                         "name = :name: AND id != :id:",
                         "bind" => array(
-                            "name" => $this->request->getPost("name"),
-                            "id" => $this->request->getPost("id")
+                            "name" => $array['name'],
+                            "id" => $array['id']
                         )
                     )
                 );
@@ -3076,7 +3130,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("solar_system"))
+                                "name" => $array['solar_system'])
                         )
                     );
 
@@ -3084,16 +3138,16 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $solar_system_id == true)
                     {
                         try 
                         {
-                            $planet = Planet::findFirstById($this->request->getPost("id"));
-                            $planet->name = $this->request->getPost("name");
-                            $planet->weight = $this->request->getPost("weight");
+                            $planet = Planet::findFirstById($array['id']);
+                            $planet->name = $array['name'];
+                            $planet->weight = $array['weight'];
                             $planet->type = $type_id->id; // передавай имена, а не id
                             $planet->solar_system = $solar_system_id->id;
                             $success = $planet->save();
@@ -3173,7 +3227,11 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'galaxy' => $this->request->getJsonRawBody()->galaxy,
+            'id' => $this->request->getJsonRawBody()->id);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -3199,15 +3257,15 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
                 $solar_systems = SolarSystem::find(
                     array(
                         "name = :name: AND id != :id:",
                         "bind" => array(
-                            "name" => $this->request->getPost("name"),
-                            "id" => $this->request->getPost("id")
+                            "name" => $array['name'],
+                            "id" => $array['id']
                         )
                     )
                 );
@@ -3218,7 +3276,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("galaxy"))
+                                "name" => $array['galaxy'])
                         )
                     );
 
@@ -3226,8 +3284,8 @@ class ApiController extends Controller
                     {
                         try 
                         {
-                            $solar_system = SolarSystem::findFirstById($this->request->getPost("id"));
-                            $solar_system->name = $this->request->getPost("name");
+                            $solar_system = SolarSystem::findFirstById($array['id']);
+                            $solar_system->name = $array['name'];
                             $solar_system->galaxy = $galaxy_id->id;
                             $success = $solar_system->save();
                             if ($success) {
@@ -3306,7 +3364,14 @@ class ApiController extends Controller
     {
         //ini_set('memory_limit', '2000M');
         //ini_set("max_execution_time", "2900");
-        if ($this->request->isPost() == true) 
+        $array = array(
+            'name' => $this->request->getJsonRawBody()->name,
+            'weight' => $this->request->getJsonRawBody()->weight,
+            'age' => $this->request->getJsonRawBody()->age,
+            'solar_system' => $this->request->getJsonRawBody()->solar_system,
+            'type' => $this->request->getJsonRawBody()->type,
+            'id' => $this->request->getJsonRawBody()->id);
+        if ($array == true) 
         {
             $validation = new Validation();
             $validation->add('name', new PresenceOf(array(
@@ -3363,15 +3428,15 @@ class ApiController extends Controller
             )));
 
 
-            $messages = $validation->validate($_POST);
+            $messages = $validation->validate($array);
             if (!count($messages)) 
             {                 
                 $stars = Star::find(
                     array(
                         "name = :name: AND id != :id:",
                         "bind" => array(
-                            "name" => $this->request->getPost("name"),
-                            "id" => $this->request->getPost("id")
+                            "name" => $array['name'],
+                            "id" => $array['id']
                         )
                     )
                 );
@@ -3382,7 +3447,7 @@ class ApiController extends Controller
                         array(
                             "name = :name: AND dele = 0",
                             "bind" => array(
-                                "name" => $this->request->getPost("solar_system"))
+                                "name" => $array['solar_system'])
                         )
                     );
 
@@ -3390,17 +3455,17 @@ class ApiController extends Controller
                         array(
                             "name = :name:",
                             "bind" => array(
-                                "name" => $this->request->getPost("type"))
+                                "name" => $array['type'])
                         )
                     );
                     if ($type_id == true && $solar_system_id == true)
                     {
                         try 
                         {
-                            $star = Star::findFirstById($this->request->getPost("id"));
-                            $star->name = $this->request->getPost("name");
-                            $star->weight = $this->request->getPost("weight");
-                            $star->age = $this->request->getPost("age");
+                            $star = Star::findFirstById($array['id']);
+                            $star->name = $array['name'];
+                            $star->weight = $array['weight'];
+                            $star->age = $array['age'];
                             $star->type = $type_id->id; // передавай имена, а не id
                             $star->solar_system = $solar_system_id->id;
                             $success = $star->save();
